@@ -1,11 +1,10 @@
 /*
  * File:     mpi_outlab.c
  * Input:
- *    A:     elements of two dimentional array 
+ *    A:     elements of two dimentional array (optional)
  * Output:
  *    A:     sequence of integers indicating the columns of
- *           the input two dimentional array. The columns 
- *           indicate the fastest path.
+ *           two dimentional array having fastest path
  *
  * Compile:  mpicc -g -Wall -o mpi_outlab mpi_outlab.c
  * Run:
@@ -13,13 +12,13 @@
  *       - p: the number of processes
  *		 - r: number of rows of the matrix
  *		 - C: number of columns of the matrix
- *       - g: generate random, distributed list
- *       - i: user will input list on process 0
+ *       - g: generate random, two dimensional matrix
+ *       - i: user will input two dimensional matrix
  *       - matrix: r*c elements of the matrix
  *
  * Notes:
  * 1.  c must be evenly divisible by p
-  */
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,37 +32,33 @@ const int RMAX = 100;
 void Usage(char* program);   // proc 0 part of Get args
 
 
-/* Functions involving communication */
-
+/* -----------------------------------------------------------------
+ * Purpose, args, output: same as Get_args function in mpisort.c
+ */
 void Get_args(int argc, char* argv[], int* global_n_p, int* local_n_p,
 	      char* gi_p, int my_rank, int p, int* r, int* c, MPI_Comm comm);
 
 /*-------------------------------------------------------------------*/
 int main(int argc, char* argv[]) {
-   int my_rank, p;
-   char g_i;
-   int global_n;
-   int local_n;
-   int r, c;
-   MPI_Comm comm;
+  int my_rank, p;
+  char g_i;
+  int global_n;
+  int local_n;
+  int r, c;
+  MPI_Comm comm;
 
-   MPI_Init(&argc, &argv);
-   comm = MPI_COMM_WORLD;
-   MPI_Comm_size(comm, &p);
-   MPI_Comm_rank(comm, &my_rank);
+  MPI_Init(&argc, &argv);
+  comm = MPI_COMM_WORLD;
+  MPI_Comm_size(comm, &p);
+  MPI_Comm_rank(comm, &my_rank);
 
-   Get_args(argc, argv, &global_n, &local_n, &g_i, my_rank, p, &r, &c, comm);
-   // Write code in a separate file called getargc.c
+  Get_args(argc, argv, &global_n, &local_n, &g_i, my_rank, p, &r, &c, comm);
+  /*Your code goes here*/
+  
+  MPI_Finalize();
 
-   // write a function called doOperations in operate.c
-   //doOperations (global_n, local_n, g_i, my_rank, p, r, c, comm);
-	    
-   MPI_Finalize();
-
-   return 0;
+  return 0;
 }  /* main */
-
-
 
 
 /*-------------------------------------------------------------------
@@ -79,8 +74,8 @@ void Usage(char* program) {
    fprintf(stderr, "   - p: the number of processes \n");
    fprintf(stderr, "   - r: rows of the matrix \n");
    fprintf(stderr, "   - c: columns of the matrix \n");
-   fprintf(stderr, "   - g: generate random, distributed list\n");
-   fprintf(stderr, "   - i: user will input list on process 0\n");
+   fprintf(stderr, "   - g: generate random, two dimensional matrix\n");
+   fprintf(stderr, "   - i: user will input two dimensional matrix\n");
    fprintf(stderr, "   - matrix: r*c elements of the matrix");
    fprintf(stderr, " ( c must be evenly divisible by p)\n");
    fflush(stderr);
